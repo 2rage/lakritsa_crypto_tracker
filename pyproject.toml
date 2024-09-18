@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "crypto-watcher"
+version = "0.1.0"
+description = ""
+authors = ["2rage <the2rage@icloud.com>"]
+readme = "README.md"
+
+[tool.poetry.scripts]
+crypto-watcher = "crypto_watcher.main:main"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+aiohttp = "^3.10.5"
+tortoise-orm = "^0.21.6"
+asyncpg = "^0.29.0"
+schedule = "^1.2.2"
+python-decouple = "^3.8"
+aiomail = "^0.0.2"
+pandas = "^2.2.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

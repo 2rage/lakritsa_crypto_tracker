@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: lakritsa
+      POSTGRES_PASSWORD: lakritsa_password
+      POSTGRES_DB: lakritsa
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - crypto_watcher_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lakritsa"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env 
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - crypto_watcher_net
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    command: poetry run crypto-watcher
+
+volumes:
+  postgres_data:
+
+networks:
+  crypto_watcher_net:

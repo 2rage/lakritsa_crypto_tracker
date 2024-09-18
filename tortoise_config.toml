@@ -1,0 +1,5 @@
+[connections]
+default = { engine = "tortoise.backends.asyncpg", credentials = { host = "db", port = 5432, user = "lakritsa", password = "lakritsa_password", database = "crypto_watcher" } }
+
+[apps.models]
+models = ["crypto_watcher.models"]
