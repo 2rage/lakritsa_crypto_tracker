@@ -1,0 +1,19 @@
+# Dockerfile.marketplace_monitor
+
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Скопируем необходимые файлы для Poetry
+COPY pyproject.toml poetry.lock /app/
+
+# Установка Poetry и зависимостей
+RUN pip install poetry
+RUN poetry config virtualenvs.create false
+RUN poetry install --no-dev
+
+# Скопируем остальной код для marketplace-monitor
+COPY marketplace_monitor /app/marketplace_monitor
+
+# Команда запуска для marketplace-monitor
+CMD ["poetry", "run", "marketplace-monitor"]

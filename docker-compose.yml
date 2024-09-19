@@ -16,14 +16,32 @@ services:
       timeout: 5s
       retries: 5
 
-  app:
+  db2:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: lakritsa2
+      POSTGRES_PASSWORD: lakritsa_password2
+      POSTGRES_DB: lakritsa2
+    volumes:
+      - postgres_data2:/var/lib/postgresql/data
+    networks:
+      - crypto_watcher_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lakritsa2"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  crypto_watcher:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.crypto_watcher
     env_file:
       - .env 
     depends_on:
       db:
+        condition: service_healthy
+      db2:
         condition: service_healthy
     networks:
       - crypto_watcher_net
@@ -32,9 +50,33 @@ services:
     ports:
       - "8000:8000"
     command: poetry run crypto-watcher
+    profiles:
+      - crypto_watcher
+
+  marketplace_monitor:
+    build:
+      context: .
+      dockerfile: Dockerfile.marketplace_monitor
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+      db2:
+        condition: service_healthy
+    networks:
+      - crypto_watcher_net
+    volumes:
+      - .:/app
+    ports:
+      - "8001:8000"
+    command: poetry run marketplace-monitor
+    profiles:
+      - marketplace_monitor
 
 volumes:
   postgres_data:
+  postgres_data2:
 
 networks:
   crypto_watcher_net:

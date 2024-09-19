@@ -7,6 +7,7 @@ readme = "README.md"
 
 [tool.poetry.scripts]
 crypto-watcher = "crypto_watcher.main:main"
+marketplace-monitor = "marketplace_monitor.main:main"
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -17,7 +18,7 @@ schedule = "^1.2.2"
 python-decouple = "^3.8"
 aiomail = "^0.0.2"
 pandas = "^2.2.2"
-
+scrapy = "^2.8.0"
 
 [build-system]
 requires = ["poetry-core"]
